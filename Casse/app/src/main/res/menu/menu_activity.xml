@@ -1,0 +1,21 @@
+
+    <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+        <item
+            android:id="@+id/menu_activity_conf"
+            android:title="Configuration"
+            android:showAsAction="ifRoom|withText"
+            />
+
+        <item
+            android:id="@+id/menu_activity_casse"
+            android:title="Casse"
+            android:showAsAction="ifRoom|withText"
+            />
+
+        <item
+            android:id="@+id/menu_activity_transf"
+            android:title="Transfert"
+            android:showAsAction="ifRoom|withText"
+            />
+
+    </menu>
