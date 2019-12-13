@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    android:id="@+id/activity_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Activities.config.Config">
+    >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/activity_config_toolbar"
@@ -15,221 +15,85 @@
         app:titleTextColor="@android:color/white"
         android:background="?attr/colorPrimary"/>
 
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="40dp">
 
-        /*Foretagkod*/
 
         <TextView
-            android:id="@+id/config_foretagkod1"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="end"
-            android:text="CODE SOC."
-            android:textColor="@color/colorAccent"
-            android:textAlignment="viewEnd"
-            android:textSize="17dp" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Configuration"
+            android:textSize="40dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="20dp"/>
 
         <EditText
-            android:id="@+id/config_foretagkod2"
+            android:id="@+id/config_foretagkod"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="9999"
-            android:paddingLeft="3dp"
-            android:textSize="17dp"
+            android:hint="Code Société"
+            android:layout_marginTop="40dp"
             android:maxLines="1"
-            android:imeOptions="flagNoExtractUi"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:orientation="horizontal">
-
-        /*URL*/
-
-        <TextView
-            android:id="@+id/config_url1"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="end"
-            android:text="URL"
-            android:textColor="@color/colorAccent"
-            android:textAlignment="viewEnd"
-            android:textSize="17dp" />
+            android:imeOptions="actionDone"/>
 
         <EditText
-            android:id="@+id/config_url2"
+            android:id="@+id/config_url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="http://192.168.0.3/casse/"
-            android:paddingLeft="3dp"
-            android:textSize="17dp"
+            android:hint="URL"
+            android:layout_marginTop="20dp"
             android:maxLines="1"
-            android:imeOptions="flagNoExtractUi"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:orientation="horizontal">
-
-        /*CONFIG*/
-
-        <TextView
-            android:id="@+id/config_api_node1"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="end"
-            android:text="CONFIG"
-            android:textColor="@color/colorAccent"
-            android:textAlignment="viewEnd"
-            android:textSize="17dp" />
+            android:imeOptions="actionNext"/>
 
         <EditText
-            android:id="@+id/config_api_node2"
+            android:id="@+id/config_bdd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="IIBMASTERDEV"
-            android:paddingLeft="3dp"
-            android:textSize="17dp"
+            android:hint="BDD"
+            android:layout_marginTop="20dp"
             android:maxLines="1"
-            android:inputType="text"
-            android:imeOptions="flagNoExtractUi"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:orientation="horizontal">
-
-        /*CONFIG*/
-
-        <TextView
-            android:id="@+id/config_merchandiser1"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="end"
-            android:text="MERCH"
-            android:textColor="@color/colorAccent"
-            android:textAlignment="viewEnd"
-            android:textSize="17dp" />
+            android:imeOptions="actionNext"/>
 
         <EditText
-            android:id="@+id/config_merchandiser2"
+            android:id="@+id/config_merchandiser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="MERCHANDISER"
-            android:paddingLeft="3dp"
-            android:textSize="17dp"
+            android:hint="Merchandiser"
+            android:layout_marginTop="20dp"
             android:maxLines="1"
-            android:inputType="text"
-            android:imeOptions="flagNoExtractUi"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:orientation="horizontal">
-
-        /*DEPOT*/
-
-        <TextView
-            android:id="@+id/config_depot1"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="end"
-            android:text="DEPOT"
-            android:textColor="@color/colorAccent"
-            android:textAlignment="viewEnd"
-            android:textSize="17dp" />
+            android:imeOptions="actionNext"/>
 
         <EditText
-            android:id="@+id/config_depot2"
+            android:id="@+id/config_depot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="DEPOT"
-            android:paddingLeft="3dp"
-            android:textSize="17dp"
+            android:hint="Depot"
+            android:layout_marginTop="20dp"
             android:maxLines="1"
-            android:inputType="text"
-            android:imeOptions="flagNoExtractUi"
-            />
+            android:imeOptions="actionNext"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/pbbar" />
+
 
     </LinearLayout>
 
-    <LinearLayout
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation_config"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/colorWhite"
+        app:itemTextColor="@color/colorWhite"
+        app:menu="@menu/bottom_navigation_config"/>
 
+</RelativeLayout>
 
-        <Button
-            android:id="@+id/articles_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
-            android:textColor="@color/white"
-            android:text="MAJ ARTICLES"
-            android:textSize="14dp"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/clients_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
-            android:textColor="@color/white"
-            android:layout_marginLeft="20dp"
-            android:text="MAJ CLIENTS"
-            android:textSize="14dp"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
-
-
-    <Button
-        android:id="@+id/config_valid_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorAccent"
-        android:textColor="@color/white"
-        android:text="Valider"
-        android:textSize="14dp" />
-
-
-
-</LinearLayout>

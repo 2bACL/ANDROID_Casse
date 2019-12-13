@@ -2,6 +2,6 @@
 <item
     android:id="@+id/add_onglet"
     android:icon="@drawable/icon_add"
-    android:title="Achat"/>
+    android:title="Ajouter"/>
 
 </menu>

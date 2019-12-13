@@ -5,28 +5,33 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.a2bsystem.casse.Helper;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 import com.a2bsystem.casse.Database.ArticleCasseController;
 import com.a2bsystem.casse.Models.ArticleCasse;
 import com.a2bsystem.casse.Models.Casse;
 import com.a2bsystem.casse.R;
-import com.a2bsystem.casse.http.Helper;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class ModifArticle extends AppCompatActivity {
 
@@ -38,12 +43,11 @@ public class ModifArticle extends AppCompatActivity {
     private EditText quantite;
     private EditText pvc;
     private EditText comm;
-    private Button validate;
+    private BottomNavigationView bottomNavigationView;
     private ArticleCasseController articleCasseController;
     private ArticleCasse articleCasse;
     private Casse casse;
 
-    AsyncHttpClient client = new AsyncHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,19 +61,29 @@ public class ModifArticle extends AppCompatActivity {
         pvc      = findViewById(R.id.modif_pvc2);
         comm     = findViewById(R.id.modif_comm2);
         quantite = findViewById(R.id.modif_quantite2);
-        validate = findViewById(R.id.article_casse_valid_button);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_valid);
 
         getArticleCasse();
         getCurrentCasse();
 
         loadArticleCasse();
 
-        getPrice();
+        setGetPa();
 
-        validate.setOnClickListener(new View.OnClickListener() {
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                saveArticleCasse();
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+
+                    case R.id.valid_onglet:
+
+                        saveArticleCasse();
+
+                        break;
+
+                }
+                return false;
             }
         });
 
@@ -209,80 +223,6 @@ public class ModifArticle extends AppCompatActivity {
         casse = (Casse) intent.getSerializableExtra("casse");
     }
 
-    private void getPrice() {
-
-        RequestParams params = Helper.GenerateParams(this,"GetPa");
-
-        articleCasseController = new ArticleCasseController(this);
-
-        String ordberlevdat = articleCasse.getDate();
-        params.put("ForetagKod",casse.getForetagkod());
-        params.put("PersSign","ADM");
-        params.put("CodeArticle",articleCasse.getArtnr());
-        params.put("CodeClient", casse.getFtgnr());
-        params.put("DateLivraison", ordberlevdat);
-
-        client.setSSLSocketFactory(new SSLSocketFactory(Helper.getSslContext(), SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
-        client.get(Helper.GenereateURI(this, params), new AsyncHttpResponseHandler() {
-
-            @Override
-            public void onStart() { }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                if(!Helper.GetSuccess(response)) {
-                    showError("Erreur lors du chargement des prix", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {}
-                    });
-                }
-                else {
-                    try {
-
-                        JSONArray jsonArray = Helper.GetList(response);
-
-                        JSONObject currentRow = jsonArray.getJSONObject(0);
-
-                        if(!currentRow.getString("pa_net").equalsIgnoreCase("null")){
-                            articleCasse.setPanet(currentRow.getString("pa_net"));
-                            pa_net.setText(articleCasse.getPanet());
-                        }
-                        if(!currentRow.getString("pa_brut").equalsIgnoreCase("null")){
-                            articleCasse.setPa_brut(currentRow.getString("pa_brut"));
-                            pa_brut.setText(articleCasse.getPa_brut());
-                        }
-                        quantite.requestFocus();
-                        /*
-                        if(!currentRow.getString("pvc").equalsIgnoreCase("null")){
-                            articleCasse.setPvc(currentRow.getString("pvc"));
-                            pvc.setText(articleCasse.getPvc());
-                        }
-                        */
-
-
-                        articleCasseController.open();
-
-                        articleCasseController.updateArticleCasse(articleCasse);
-
-                        articleCasseController.close();
-
-
-                    } catch (JSONException e) {
-                        showError("Erreur lors du chargement des prix", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) { }
-                        });
-                        e.printStackTrace();
-                    }
-                } }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) { }
-
-            @Override public void onRetry(int retryNo) { }
-        });
-    }
-
 
     public void showError(String message, DialogInterface.OnClickListener listener)
     {
@@ -302,6 +242,125 @@ public class ModifArticle extends AppCompatActivity {
         builder.setCancelable(false);
         builder.setPositiveButton("OK", listener);
         builder.show();
+    }
+
+    private void setGetPa() {
+
+        articleCasseController = new ArticleCasseController(this);
+
+        // Construction de l'URL
+        RequestParams params = Helper.GenerateParams(ModifArticle.this);
+        String ordberlevdat = articleCasse.getDate();
+        params.put("ForetagKod",casse.getForetagkod());
+        params.put("PersSign","ADM");
+        params.put("CodeArticle",articleCasse.getArtnr());
+        params.put("CodeClient", casse.getFtgnr());
+        params.put("DateLivraison", ordberlevdat);
+        String URL = Helper.GenereateURI(ModifArticle.this, params, "getpa");
+
+
+
+        // Call API JEE
+        GetPa task = new GetPa();
+        task.execute(new String[] { URL });
+    }
+
+
+    private class GetPa extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            String output = null;
+            for (String url : urls) {
+                output = getOutputFromUrl(url);
+            }
+            return output;
+        }
+
+        private String getOutputFromUrl(String url) {
+            StringBuffer output = new StringBuffer("");
+            try {
+                InputStream stream = getHttpConnection(url);
+                BufferedReader buffer = new BufferedReader(
+                        new InputStreamReader(stream));
+                String s = "";
+                while ((s = buffer.readLine()) != null)
+                    output.append(s);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return output.toString();
+        }
+
+        // Makes HttpURLConnection and returns InputStream
+        private InputStream getHttpConnection(String urlString)
+                throws IOException {
+            InputStream stream = null;
+            URL url = new URL(urlString);
+            URLConnection connection = url.openConnection();
+
+            try {
+                HttpURLConnection httpConnection = (HttpURLConnection) connection;
+                httpConnection.setRequestMethod("GET");
+                httpConnection.connect();
+
+                if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    stream = httpConnection.getInputStream();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return stream;
+        }
+
+        @Override
+        protected void onPostExecute(String output) {
+            System.out.println(output);
+            if(output.equalsIgnoreCase("-1"))
+            {
+                showError("Erreur lors du chargement des prix...", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+            }
+            else {
+
+                try {
+
+
+                    JSONArray jsonArray = new JSONArray(output);
+
+                    JSONObject currentRow = jsonArray.getJSONObject(0);
+
+                    if(!currentRow.getString("pa_net").equalsIgnoreCase("null")){
+                        articleCasse.setPanet(currentRow.getString("pa_net"));
+                        pa_net.setText(articleCasse.getPanet());
+                    }
+                    if(!currentRow.getString("pa_brut").equalsIgnoreCase("null")){
+                        articleCasse.setPa_brut(currentRow.getString("pa_brut"));
+                        pa_brut.setText(articleCasse.getPa_brut());
+                    }
+                    quantite.requestFocus();
+                    /*
+                    if(!currentRow.getString("pvc").equalsIgnoreCase("null")){
+                        articleCasse.setPvc(currentRow.getString("pvc"));
+                        pvc.setText(articleCasse.getPvc());
+                    }
+                    */
+
+
+                    articleCasseController.open();
+
+                    articleCasseController.updateArticleCasse(articleCasse);
+
+                    articleCasseController.close();
+
+                } catch (Exception ex) {System.out.println("errrreeeuuurrrr" + ex);}
+
+
+
+            }
+        }
     }
 }
 

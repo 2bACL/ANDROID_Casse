@@ -12,15 +12,16 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import com.a2bsystem.casse.Activities.listecasses.ListeCasses;
 import com.a2bsystem.casse.Adapters.ListViewAdapter;
 import com.a2bsystem.casse.Database.CasseController;
 import com.a2bsystem.casse.Database.ClientController;
+import com.a2bsystem.casse.Helper;
 import com.a2bsystem.casse.Models.Casse;
 import com.a2bsystem.casse.Models.Client;
 import com.a2bsystem.casse.R;
-import com.a2bsystem.casse.http.Helper;
 
 import static com.a2bsystem.casse.Activities.config.Config.Config;
 
@@ -83,13 +84,12 @@ public class NouvelleCasse extends AppCompatActivity implements SearchView.OnQue
     private void createCasse(int id){
         getPrefs();
         Client client = clients.get(id);
-        String date = Helper.getDate();
         Casse casse = new Casse(Foretagkod,
                 Lagstalle,
                 Merchandiser,
                 client.getFtgnr(),
                 client.getFtgnamn(),
-                date,
+                Helper.getDate(),
                 "",
                 "",
                 "CREATED");

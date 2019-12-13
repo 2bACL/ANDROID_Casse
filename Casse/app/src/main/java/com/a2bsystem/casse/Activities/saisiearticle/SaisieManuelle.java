@@ -6,10 +6,12 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -29,7 +31,7 @@ public class SaisieManuelle extends AppCompatActivity {
     private EditText quantite;
     private EditText pvc;
     private EditText comm;
-    private Button validate;
+    private BottomNavigationView bottomNavigationView;
     private ArticleCasseController articleCasseController;
     private ArticleController articleController;
     private Article articleR;
@@ -54,17 +56,28 @@ public class SaisieManuelle extends AppCompatActivity {
         pvc      = findViewById(R.id.saisie_pvc2);
         comm     = findViewById(R.id.saisie_comm2);
         quantite = findViewById(R.id.saisie_quantite2);
-        validate = findViewById(R.id.article_casse_saisie_button);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_valid);
 
         article.setText(articleR.getQ_gcar_lib1());
         putDate();
     }
 
     private void initListeners(){
-        validate.setOnClickListener(new View.OnClickListener() {
+
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                createArticleCasse();
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+
+                    case R.id.valid_onglet:
+
+                        createArticleCasse();
+
+                        break;
+
+                }
+                return false;
             }
         });
     }

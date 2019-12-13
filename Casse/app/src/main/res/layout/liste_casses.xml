@@ -25,15 +25,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="80dp"/>
 
-        <Button
-            android:id="@+id/add_main_button"
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_navigation_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
-            android:textColor="@color/white"
-            android:text="AJOUTER"
-            android:textSize="14dp"
-            android:layout_margin="20dp"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            app:itemIconTint="@color/colorWhite"
+            app:itemTextColor="@color/colorWhite"
+            app:menu="@menu/bottom_navigation_add"/>
     </RelativeLayout>
 </LinearLayout>

@@ -245,19 +245,14 @@
             android:maxLength="50" />
 
 
-        <Button
-            android:id="@+id/article_casse_valid_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/colorAccent"
-            android:textColor="@color/white"
-            android:text="Valider"
-            android:textSize="14dp" />
-
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation_valid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/colorWhite"
+        app:itemTextColor="@color/colorWhite"
+        app:menu="@menu/bottom_navigation_valid"/>
 
     </LinearLayout>

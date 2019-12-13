@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,7 +29,7 @@ import com.a2bsystem.casse.R;
 
 public class CasseActivity extends AppCompatActivity {
 
-    private Button mAddButton;
+    BottomNavigationView bottomNavigationView;
     private TextView mClient;
     private TextView mHdebut;
     private TextView mHfin;
@@ -42,7 +44,7 @@ public class CasseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.casse);
 
-        mAddButton = findViewById(R.id.add_casse_button);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_add);
         mClient    = findViewById(R.id.casse_client2);
         mHdebut    = findViewById(R.id.casse_H_debut2);
         mHfin      = findViewById(R.id.casse_H_fin2);
@@ -62,16 +64,25 @@ public class CasseActivity extends AppCompatActivity {
     }
 
     private void initListeners() {
-        mAddButton.setOnClickListener(new View.OnClickListener() {
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = getIntent();
-                Casse casse = (Casse) intent.getSerializableExtra("casse");
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
 
-                Intent SaisieActivity = new Intent(CasseActivity.this, SaisieArticle.class);
-                SaisieActivity.putExtra("casse", casse);
-                startActivity(SaisieActivity);
+                    case R.id.add_onglet:
 
+                        Intent intent = getIntent();
+                        Casse casse = (Casse) intent.getSerializableExtra("casse");
+
+                        Intent SaisieActivity = new Intent(CasseActivity.this, SaisieArticle.class);
+                        SaisieActivity.putExtra("casse", casse);
+                        startActivity(SaisieActivity);
+
+                        break;
+
+                }
+                return false;
             }
         });
     }

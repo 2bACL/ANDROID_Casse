@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -12,9 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-
-import com.a2bsystem.casse.Activities.casse.CasseActivity;
-import com.amitshekhar.DebugDB;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,7 +32,7 @@ import com.a2bsystem.casse.R;
 
 public class ListeCasses extends AppCompatActivity {
 
-    private Button addButton;
+    private BottomNavigationView bottomNavigationView;
     private CasseController casseController;
     private ArticleCasseController articleCasseController;
 
@@ -44,7 +44,6 @@ public class ListeCasses extends AppCompatActivity {
 
         initFields();
         initListeners();
-        DebugDB.getAddressLog();
 
         deleteOldTransferedCasse();
         updateCasse();
@@ -59,17 +58,28 @@ public class ListeCasses extends AppCompatActivity {
     }
 
     private void initFields(){
-        addButton = findViewById(R.id.add_main_button);
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation_add);
+
     }
 
     private void initListeners(){
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent NewCasseActivity = new Intent(ListeCasses.this, NouvelleCasse.class);
-                startActivity(NewCasseActivity);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+
+                    case R.id.add_onglet:
+
+                        Intent NewCasseActivity = new Intent(ListeCasses.this, NouvelleCasse.class);
+                        startActivity(NewCasseActivity);
+
+                        break;
+
+                }
+                return false;
             }
         });
 

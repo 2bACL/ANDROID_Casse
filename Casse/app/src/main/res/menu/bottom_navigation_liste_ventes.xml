@@ -1,7 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-<item
-    android:id="@+id/ventes_list_onglet"
-    android:icon="@drawable/icon_add"
-    android:title="Ajouter"/>
-
-</menu>
