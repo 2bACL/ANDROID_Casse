@@ -24,6 +24,7 @@ import com.a2bsystem.casse.Activities.config.Config;
 import com.a2bsystem.casse.Activities.nouvellecasse.NouvelleCasse;
 import com.a2bsystem.casse.Activities.transfert.Transfert;
 import com.a2bsystem.casse.Adapters.CasseAdapter;
+import com.a2bsystem.casse.Adapters.SwipeDismissListViewTouchListener;
 import com.a2bsystem.casse.Database.ArticleCasseController;
 import com.a2bsystem.casse.Database.CasseController;
 import com.a2bsystem.casse.Models.ArticleCasse;
@@ -124,6 +125,34 @@ public class ListeCasses extends AppCompatActivity {
                 return true;
             }
         });
+
+        listView.setOnTouchListener(new SwipeDismissListViewTouchListener(
+                listView,
+                new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                    @Override
+                    public boolean canDismiss(int position) {
+                        return true;
+                    }
+
+                    @Override
+                    public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                        for (int position : reverseSortedPositions) {
+
+                            if(casses.get(position).getStatus().equalsIgnoreCase("TRANSFERED")){
+                                showError("Casse déja transféré", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) { }
+                                });
+                            }
+                            else {
+                                deleteCasse(casses.get(position));
+                            }
+
+                        }
+
+                    }
+                }));
+
         casseController.close();
     }
 
