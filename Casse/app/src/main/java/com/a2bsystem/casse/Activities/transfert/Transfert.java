@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a2bsystem.casse.Activities.config.Configuration;
 import com.a2bsystem.casse.Helper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -28,13 +29,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-import com.a2bsystem.casse.Activities.config.Config;
 import com.a2bsystem.casse.Activities.listecasses.ListeCasses;
 import com.a2bsystem.casse.Database.ArticleCasseController;
 import com.a2bsystem.casse.Database.CasseController;
 import com.a2bsystem.casse.Models.ArticleCasse;
 import com.a2bsystem.casse.Models.Casse;
 import com.a2bsystem.casse.R;
+
+import static com.a2bsystem.casse.Activities.config.Config.Config;
 
 public class Transfert extends AppCompatActivity {
 
@@ -65,7 +67,7 @@ public class Transfert extends AppCompatActivity {
     }
 
     private void getPrefs() {
-        SharedPreferences sharedPreferences = this.getApplicationContext().getSharedPreferences(Config.Config, 0);
+        SharedPreferences sharedPreferences = this.getApplicationContext().getSharedPreferences(Config, 0);
         Merchandiser = sharedPreferences.getString("Merchandiser", "");
         Depot = sharedPreferences.getString("Depot", "");
         Foretagkod = sharedPreferences.getString("Foretagkod","");
@@ -220,7 +222,7 @@ public class Transfert extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_activity_conf:
 
-                Intent ConfigActivity = new Intent(Transfert.this, Config.class);
+                Intent ConfigActivity = new Intent(Transfert.this, Configuration.class);
                 Transfert.this.finish();
                 startActivity(ConfigActivity);
 
@@ -248,7 +250,7 @@ public class Transfert extends AppCompatActivity {
         params.put("ForetagKod",Foretagkod);
         params.put("ftgnr",casse.getFtgnr());
         params.put("lagstalle",Depot);
-        params.put("q_2b_casse_dt_reprise",casse.getQ_2b_casse_dt_reprise());
+        params.put("q_2b_casse_dt_reprise",casse.getQ_2b_casse_dt_reprise()+ " 00:00:00.000");
         params.put("q_2b_merch_code",Merchandiser);
         params.put("q_2b_casse_heure_deb", h_debut);
         params.put("q_2b_casse_heure_fin", h_fin);
@@ -268,7 +270,7 @@ public class Transfert extends AppCompatActivity {
         params.put("ForetagKod",Foretagkod);
         params.put("artnr",articleCasse.getArtnr());
         params.put("momskod",articleCasse.getMomskod());
-        params.put("q_2b_casse_dt_reprise",articleCasse.getQ_2b_casse_dt_reprise());
+        params.put("q_2b_casse_dt_reprise",articleCasse.getQ_2b_casse_dt_reprise()+ " 00:00:00.000");
         params.put("ordberlevdat", ordberlevdat);
         params.put("q_2b_art_divers", "0");
         params.put("q_2b_casse_ligne", articleCasse.getQ_2b_casse_ligne());

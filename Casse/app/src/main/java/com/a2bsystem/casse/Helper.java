@@ -71,7 +71,7 @@ public class Helper {
 
     public static String getDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                "yyyy-MM-dd", Locale.getDefault());
         Date date = new Date();
         return dateFormat.format(date);
     }

@@ -12,15 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import com.a2bsystem.casse.Activities.config.Config;
+import com.a2bsystem.casse.Activities.config.Configuration;
 import com.a2bsystem.casse.Activities.nouvellecasse.NouvelleCasse;
 import com.a2bsystem.casse.Activities.transfert.Transfert;
 import com.a2bsystem.casse.Adapters.CasseAdapter;
@@ -300,7 +298,7 @@ public class ListeCasses extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_activity_conf:
 
-                Intent ConfigActivity = new Intent(ListeCasses.this, Config.class);
+                Intent ConfigActivity = new Intent(ListeCasses.this, Configuration.class);
                 ListeCasses.this.finish();
                 startActivity(ConfigActivity);
 

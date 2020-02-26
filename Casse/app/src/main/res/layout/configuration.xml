@@ -7,17 +7,20 @@
     android:layout_height="match_parent"
     >
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/activity_configuration_toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@android:color/white"
+        android:background="?attr/colorPrimary"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_margin="40dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/img_acceuil_app" />
 
         <TextView
             android:layout_width="match_parent"
@@ -28,45 +31,43 @@
             android:textColor="@color/colorPrimary"
             android:layout_marginTop="20dp"/>
 
-        <EditText
-            android:id="@+id/config_url"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="URL"
-            android:layout_marginTop="40dp"
-            android:inputType="text"
-            android:imeOptions="actionNext"/>
 
         <EditText
-            android:id="@+id/config_bdd"
+            android:id="@+id/config_merchandiser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="BDD"
+            android:hint="Merchandiser"
             android:layout_marginTop="20dp"
             android:inputType="text"
             android:imeOptions="actionNext"/>
 
         <EditText
-            android:id="@+id/config_foretagkod"
+            android:id="@+id/config_depot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Code Société"
+            android:hint="Depot"
             android:layout_marginTop="20dp"
-            android:inputType="number"
+            android:inputType="text"
             android:imeOptions="actionDone"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/pbbar" />
 
 
     </LinearLayout>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_navigation_config"
+        android:id="@+id/bottom_navigation_configuration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         app:itemIconTint="@color/colorWhite"
         app:itemTextColor="@color/colorWhite"
-        app:menu="@menu/bottom_navigation_config"/>
+        app:menu="@menu/bottom_navigation_configuration"/>
 
 </RelativeLayout>
 

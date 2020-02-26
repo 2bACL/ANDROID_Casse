@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import com.a2bsystem.casse.Activities.listecasses.ListeCasses;
 import com.a2bsystem.casse.Adapters.ListViewAdapter;
@@ -24,6 +23,7 @@ import com.a2bsystem.casse.Models.Client;
 import com.a2bsystem.casse.R;
 
 import static com.a2bsystem.casse.Activities.config.Config.Config;
+
 
 public class NouvelleCasse extends AppCompatActivity implements SearchView.OnQueryTextListener{
 

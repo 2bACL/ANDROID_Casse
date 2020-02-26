@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.a2bsystem.casse.Activities.config.Config;
+import com.a2bsystem.casse.Activities.config.Configuration;
 import com.a2bsystem.casse.Activities.listecasses.ListeCasses;
 import com.a2bsystem.casse.Helper;
 import com.a2bsystem.casse.R;
@@ -29,10 +30,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         eMdp = findViewById(R.id.main_mdp);
         pbbar = findViewById(R.id.pbbar);
         pbbar.setVisibility(View.GONE);
-        eUser.setText("ACL");
-        eMdp.setText("ACL");
+        eUser.setText("");
+        eMdp.setText("");
     }
 
     public void initListeners() {
@@ -74,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.deco_onglet:
 
                         setDeconnect();
+
+                        break;
+                    case R.id.config_onglet:
+
+                        Intent configActivity = new Intent(MainActivity.this, Config.class);
+                        startActivity(configActivity);
 
                         break;
 
