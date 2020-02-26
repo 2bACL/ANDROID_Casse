@@ -130,7 +130,7 @@ public class ArticleController {
         else {
             article.setId(0);
             article.setArtnr("artnr");
-            article.setMomskod("momskod");
+            article.setMomskod("0");
             article.setQ_gcar_lib1("qg_car_lib1");
         }
 

@@ -258,6 +258,8 @@ public class Transfert extends AppCompatActivity {
         String URL = Helper.GenereateURI(Transfert.this, params, "createcasse");
 
 
+
+        System.out.println("aaa " + URL);
         // Call API JEE
         CreateCasse task = new CreateCasse();
         task.execute(new String[] { URL });
@@ -284,6 +286,7 @@ public class Transfert extends AppCompatActivity {
         params.put("q_2b_casse_pa_net", articleCasse.getPanet());
         String URL = Helper.GenereateURI(Transfert.this, params, "addarticle");
 
+        System.out.println("bbb " + URL);
 
         // Call API JEE
         AddArticle task = new AddArticle();
@@ -339,7 +342,7 @@ public class Transfert extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String output) {
-            System.out.println("aaaaaaaaa " +output);
+            System.out.println("ccccc " +output);
             if(output.equalsIgnoreCase("-1"))
             {
                 showError("Problème de transfert d'article...", new DialogInterface.OnClickListener() {
@@ -401,6 +404,7 @@ public class Transfert extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String output) {
+            System.out.println("dddd " +output);
             if(output.equalsIgnoreCase("-1"))
             {
                 showError("Problème de transfert...", new DialogInterface.OnClickListener() {
