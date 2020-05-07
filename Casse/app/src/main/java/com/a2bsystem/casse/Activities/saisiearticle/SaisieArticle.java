@@ -43,7 +43,7 @@ public class SaisieArticle extends AppCompatActivity {
 
         //intializing scan object
         qrScan = new IntentIntegrator(this);
-
+        qrScan.initiateScan();
         initFields();
         initListeners();
     }

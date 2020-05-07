@@ -118,6 +118,7 @@
                 android:maxLines="1"
                 android:inputType="numberDecimal"
                 android:imeOptions="flagNoExtractUi"
+                android:focusable="false"
                 />
 
         </LinearLayout>
@@ -149,6 +150,7 @@
                 android:maxLines="1"
                 android:inputType="numberDecimal"
                 android:imeOptions="flagNoExtractUi"
+                android:focusable="false"
                 />
 
         </LinearLayout>
@@ -179,7 +181,7 @@
                 android:textSize="17dp"
                 android:maxLines="1"
                 android:inputType="numberDecimal"
-                android:imeOptions="flagNoExtractUi"
+                android:imeOptions="actionDone"
                 />
 
         </LinearLayout>
@@ -212,6 +214,7 @@
                 android:maxLines="1"
                 android:inputType="numberDecimal"
                 android:imeOptions="flagNoExtractUi"
+                android:focusable="false"
                 />
 
         </LinearLayout>
@@ -239,10 +242,8 @@
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
             android:textSize="15dp"
-            android:maxLines="3"
-            android:inputType="textMultiLine"
-            android:imeOptions="flagNoExtractUi"
-            android:maxLength="50" />
+            android:inputType="text"
+            android:imeOptions="actionDone"/>
 
 
     <android.support.design.widget.BottomNavigationView
