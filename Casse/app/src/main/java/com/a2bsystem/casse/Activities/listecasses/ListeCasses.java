@@ -1,8 +1,11 @@
 package com.a2bsystem.casse.Activities.listecasses;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -298,9 +302,14 @@ public class ListeCasses extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_activity_conf:
 
-                Intent ConfigActivity = new Intent(ListeCasses.this, Configuration.class);
-                ListeCasses.this.finish();
-                startActivity(ConfigActivity);
+                if(haveInternetConnection()) {
+                    Intent ConfigActivity = new Intent(ListeCasses.this, Configuration.class);
+                    ListeCasses.this.finish();
+                    startActivity(ConfigActivity);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Config indisponible en mode déconnecté...", Toast.LENGTH_LONG).show();
+                }
 
                 return true;
             case R.id.menu_activity_casse:
@@ -315,5 +324,17 @@ public class ListeCasses extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private boolean haveInternetConnection(){
+        // Fonction haveInternetConnection : return true si connecté, return false dans le cas contraire
+        NetworkInfo network = ((ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+
+        if (network==null || !network.isConnected())
+        {
+            // Le périphérique n'est pas connecté à Internet
+            return false;
+        }
+        return true;
     }
 }

@@ -1,8 +1,11 @@
 package com.a2bsystem.casse.Activities.connection;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -13,12 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.a2bsystem.casse.Activities.config.Config;
 import com.a2bsystem.casse.Activities.config.Configuration;
 import com.a2bsystem.casse.Activities.listecasses.ListeCasses;
 import com.a2bsystem.casse.Helper;
 import com.a2bsystem.casse.R;
+import com.amitshekhar.DebugDB;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
@@ -45,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DebugDB.getAddressLog();
 
         initFields();
         initListeners();
@@ -116,6 +123,18 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private boolean haveInternetConnection(){
+        // Fonction haveInternetConnection : return true si connecté, return false dans le cas contraire
+        NetworkInfo network = ((ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+
+        if (network==null || !network.isConnected())
+        {
+            // Le périphérique n'est pas connecté à Internet
+            return false;
+        }
+        return true;
+    }
+
 
     private void setDeconnect() {
         if(!eUser.getText().toString().equalsIgnoreCase("") && !eMdp.getText().toString().equalsIgnoreCase("")){
@@ -130,8 +149,14 @@ public class MainActivity extends AppCompatActivity {
 
             String URL = Helper.GenereateURI(MainActivity.this, params, "deconnect");
 
-            Deconnect task = new Deconnect();
-            task.execute(new String[] { URL });
+            if(haveInternetConnection()) {
+                Deconnect task = new Deconnect();
+                task.execute(new String[] { URL });
+            }
+            else {
+                MainActivity.this.finish();
+            }
+
         }
     }
 
@@ -153,9 +178,17 @@ public class MainActivity extends AppCompatActivity {
         //Verouillage de l'interface
         lockUI();
 
-        // Call API JEE
-        Connect task = new Connect();
-        task.execute(new String[] { URL });
+        if(haveInternetConnection()) {
+            // Call API JEE
+            Connect task = new Connect();
+            task.execute(new String[] { URL });
+        }
+        else {
+            pbbar.setVisibility(View.GONE);
+            Toast.makeText(getApplicationContext(), "Fonctionnement en mode déconnecté...", Toast.LENGTH_LONG).show();
+            Intent VentesList = new Intent(MainActivity.this, ListeCasses.class);
+            startActivity(VentesList);
+        }
 
     }
 

@@ -1,9 +1,12 @@
 package com.a2bsystem.casse.Activities.transfert;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -222,9 +225,14 @@ public class Transfert extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_activity_conf:
 
-                Intent ConfigActivity = new Intent(Transfert.this, Configuration.class);
-                Transfert.this.finish();
-                startActivity(ConfigActivity);
+                if(haveInternetConnection()) {
+                    Intent ConfigActivity = new Intent(Transfert.this, Configuration.class);
+                    Transfert.this.finish();
+                    startActivity(ConfigActivity);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Config indisponible en mode déconnecté...", Toast.LENGTH_LONG).show();
+                }
 
                 return true;
             case R.id.menu_activity_casse:
@@ -239,6 +247,18 @@ public class Transfert extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private boolean haveInternetConnection(){
+        // Fonction haveInternetConnection : return true si connecté, return false dans le cas contraire
+        NetworkInfo network = ((ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+
+        if (network==null || !network.isConnected())
+        {
+            // Le périphérique n'est pas connecté à Internet
+            return false;
+        }
+        return true;
     }
 
     private void setCreateCasse(Casse casse) {
@@ -260,9 +280,15 @@ public class Transfert extends AppCompatActivity {
 
 
         System.out.println("aaa " + URL);
-        // Call API JEE
-        CreateCasse task = new CreateCasse();
-        task.execute(new String[] { URL });
+
+        if(haveInternetConnection()){
+            CreateCasse task = new CreateCasse();
+            task.execute(new String[] { URL });
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Transfert indisponible en mode déconnecté...", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private void setAddArticle(ArticleCasse articleCasse) {
@@ -288,9 +314,15 @@ public class Transfert extends AppCompatActivity {
 
         System.out.println("bbb " + URL);
 
-        // Call API JEE
-        AddArticle task = new AddArticle();
-        task.execute(new String[] { URL });
+
+        if(haveInternetConnection()){
+            // Call API JEE
+            AddArticle task = new AddArticle();
+            task.execute(new String[] { URL });
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Transfert indisponible en mode déconnecté...", Toast.LENGTH_LONG).show();
+        }
     }
 
 

@@ -18,8 +18,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.a2bsystem.casse.Activities.listecasses.ListeCasses;
+import com.a2bsystem.casse.Activities.modifarticle.ModifArticle;
 import com.a2bsystem.casse.Activities.transfert.Transfert;
+import com.a2bsystem.casse.Database.ArticleCasseController;
+import com.a2bsystem.casse.Database.PrixController;
 import com.a2bsystem.casse.Helper;
+import com.a2bsystem.casse.Models.Prix;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
@@ -50,6 +54,7 @@ public class Configuration extends AppCompatActivity {
 
     private ClientController clientController;
     private ArticleController articleController;
+    private PrixController prixController;
 
     Toast successArticles;
     Toast successClients;
@@ -247,6 +252,25 @@ public class Configuration extends AppCompatActivity {
     }
 
 
+    private void setGetPa() {
+
+        prixController = new PrixController(this);
+
+        // Construction de l'URL
+        RequestParams params = Helper.GenerateParams(Configuration.this);
+        params.put("ForetagKod","9999");
+        params.put("PersSign","ADM");
+        params.put("Lagstalle",mDepot.getText().toString());
+        String URL = Helper.GenereateURI(Configuration.this, params, "getpa");
+
+
+
+        // Call API JEE
+        GetPa task = new GetPa();
+        task.execute(new String[] { URL });
+    }
+
+
     private class GetArticles extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
@@ -295,9 +319,6 @@ public class Configuration extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String output) {
-            unLockUI(true);
-            successArticles.cancel();
-            pbbar.setVisibility(View.GONE);
             if(output.equalsIgnoreCase("-1"))
             {
                 showError("Erreur lors du chargement des articles...", new DialogInterface.OnClickListener() {
@@ -322,10 +343,7 @@ public class Configuration extends AppCompatActivity {
                     }
                     articleController.close();
 
-                    showOk("Mise à jour des articles réussie", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {}
-                    });
+                    setGetPa();
 
 
 
@@ -427,6 +445,108 @@ public class Configuration extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     showError("Erreur lors du chargement des clients...", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) { }
+                    });
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    private class GetPa extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            String output = null;
+            for (String url : urls) {
+                output = getOutputFromUrl(url);
+            }
+            return output;
+        }
+
+        private String getOutputFromUrl(String url) {
+            StringBuffer output = new StringBuffer("");
+            try {
+                InputStream stream = getHttpConnection(url);
+                BufferedReader buffer = new BufferedReader(
+                        new InputStreamReader(stream));
+                String s = "";
+                while ((s = buffer.readLine()) != null)
+                    output.append(s);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return output.toString();
+        }
+
+        // Makes HttpURLConnection and returns InputStream
+        private InputStream getHttpConnection(String urlString)
+                throws IOException {
+            InputStream stream = null;
+            URL url = new URL(urlString);
+            URLConnection connection = url.openConnection();
+
+            try {
+                HttpURLConnection httpConnection = (HttpURLConnection) connection;
+                httpConnection.setRequestMethod("GET");
+                httpConnection.connect();
+
+                if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    stream = httpConnection.getInputStream();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return stream;
+        }
+
+        @Override
+        protected void onPostExecute(String output) {
+            unLockUI(true);
+            successArticles.cancel();
+            pbbar.setVisibility(View.GONE);
+            if(output.equalsIgnoreCase("-1"))
+            {
+                showError("Erreur lors du chargement des prix...", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+            }
+            else {
+
+                try {
+
+                    JSONArray jsonArray = new JSONArray(output);
+
+                    prixController.open();
+                    prixController.deleteAll();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject currentRow = jsonArray.getJSONObject(i);
+
+                        Prix prix = new Prix(currentRow.getString("FORETAGKOD"),
+                                currentRow.getString("LAGSTALLE"),
+                                currentRow.getString("FTGNR"),
+                                currentRow.getString("ARTNR"),
+                                currentRow.getString("PANET"),
+                                currentRow.getString("PABRUT"),
+                                currentRow.getString("PVC"),
+                                currentRow.getString("DATE").substring(0,10)
+                        );
+
+                        prixController.createPrix(prix);
+                    }
+                    showOk("Mise à jour des articles réussie", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) { }
+                    });
+                    prixController.close();
+
+
+
+                } catch (JSONException e) {
+                    showError("Erreur lors du chargement des prix...", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) { }
                     });

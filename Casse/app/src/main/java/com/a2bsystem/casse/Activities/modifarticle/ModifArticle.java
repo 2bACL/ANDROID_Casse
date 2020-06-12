@@ -15,7 +15,9 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.a2bsystem.casse.Database.PrixController;
 import com.a2bsystem.casse.Helper;
+import com.a2bsystem.casse.Models.Prix;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
@@ -32,6 +34,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class ModifArticle extends AppCompatActivity {
 
@@ -47,6 +54,7 @@ public class ModifArticle extends AppCompatActivity {
     private ArticleCasseController articleCasseController;
     private ArticleCasse articleCasse;
     private Casse casse;
+    private PrixController prixController;
 
 
     @Override
@@ -67,9 +75,7 @@ public class ModifArticle extends AppCompatActivity {
         getCurrentCasse();
 
         loadArticleCasse();
-
-        setGetPa();
-
+        getPrix();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -114,6 +120,35 @@ public class ModifArticle extends AppCompatActivity {
         day = Integer.parseInt(date);
 
         showDate(year, month, day);
+    }
+
+    private void getPrix(){
+        prixController = new PrixController(this);
+        prixController.open();
+
+        List<Prix> prices = prixController.getPrixByArticleCasse(articleCasse);
+
+        if(prices.size() == 0) {
+            showError("Pas de prix disponible pour cet aricle à cette date...", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    articleCasse.setPanet("0.0");
+                    pa_net.setText(articleCasse.getPanet());
+
+                    articleCasse.setPa_brut("0.0");
+                    pa_brut.setText(articleCasse.getPa_brut());
+                }
+            });
+        }
+        else {
+            articleCasse.setPanet(prices.get(0).getPanet());
+            pa_net.setText(articleCasse.getPanet());
+
+            articleCasse.setPa_brut(prices.get(0).getPa_brut());
+            pa_brut.setText(articleCasse.getPa_brut());
+        }
+
+        quantite.requestFocus();
     }
 
     private Boolean verifArticle() {
@@ -171,15 +206,31 @@ public class ModifArticle extends AppCompatActivity {
             articleCasse.setPa_brut(pa_brut.getText().toString());
             articleCasse.setQte(quantite.getText().toString());
 
-            articleCasseController.updateArticleCasse(articleCasse);
+            if(articleCasse.getId() == 0) {
+                articleCasseController.createArticleCasse(articleCasse);
 
-            articleCasseController.close();
-            showOk("Article modifié", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    ModifArticle.this.finish();
-                }
-            });
+                articleCasseController.close();
+                showOk("Article créé", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ModifArticle.this.finish();
+                    }
+                });
+            }
+            else {
+                articleCasseController.updateArticleCasse(articleCasse);
+
+                articleCasseController.close();
+                showOk("Article modifié", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ModifArticle.this.finish();
+                    }
+                });
+            }
+
+
+
         }
     }
 
@@ -244,123 +295,6 @@ public class ModifArticle extends AppCompatActivity {
         builder.show();
     }
 
-    private void setGetPa() {
 
-        articleCasseController = new ArticleCasseController(this);
-
-        // Construction de l'URL
-        RequestParams params = Helper.GenerateParams(ModifArticle.this);
-        String ordberlevdat = articleCasse.getDate();
-        params.put("ForetagKod",casse.getForetagkod());
-        params.put("PersSign","ADM");
-        params.put("CodeArticle",articleCasse.getArtnr());
-        params.put("CodeClient", casse.getFtgnr());
-        params.put("DateLivraison", ordberlevdat);
-        String URL = Helper.GenereateURI(ModifArticle.this, params, "getpa");
-
-
-
-        // Call API JEE
-        GetPa task = new GetPa();
-        task.execute(new String[] { URL });
-    }
-
-
-    private class GetPa extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-            String output = null;
-            for (String url : urls) {
-                output = getOutputFromUrl(url);
-            }
-            return output;
-        }
-
-        private String getOutputFromUrl(String url) {
-            StringBuffer output = new StringBuffer("");
-            try {
-                InputStream stream = getHttpConnection(url);
-                BufferedReader buffer = new BufferedReader(
-                        new InputStreamReader(stream));
-                String s = "";
-                while ((s = buffer.readLine()) != null)
-                    output.append(s);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            return output.toString();
-        }
-
-        // Makes HttpURLConnection and returns InputStream
-        private InputStream getHttpConnection(String urlString)
-                throws IOException {
-            InputStream stream = null;
-            URL url = new URL(urlString);
-            URLConnection connection = url.openConnection();
-
-            try {
-                HttpURLConnection httpConnection = (HttpURLConnection) connection;
-                httpConnection.setRequestMethod("GET");
-                httpConnection.connect();
-
-                if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    stream = httpConnection.getInputStream();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            return stream;
-        }
-
-        @Override
-        protected void onPostExecute(String output) {
-            System.out.println(output);
-            if(output.equalsIgnoreCase("-1"))
-            {
-                showError("Erreur lors du chargement des prix...", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-            }
-            else {
-
-                try {
-
-
-                    JSONArray jsonArray = new JSONArray(output);
-
-                    JSONObject currentRow = jsonArray.getJSONObject(0);
-
-                    if(!currentRow.getString("pa_net").equalsIgnoreCase("null")){
-                        articleCasse.setPanet(currentRow.getString("pa_net"));
-                        pa_net.setText(articleCasse.getPanet());
-                    }
-                    if(!currentRow.getString("pa_brut").equalsIgnoreCase("null")){
-                        articleCasse.setPa_brut(currentRow.getString("pa_brut"));
-                        pa_brut.setText(articleCasse.getPa_brut());
-                    }
-                    quantite.requestFocus();
-                    /*
-                    if(!currentRow.getString("pvc").equalsIgnoreCase("null")){
-                        articleCasse.setPvc(currentRow.getString("pvc"));
-                        pvc.setText(articleCasse.getPvc());
-                    }
-                    */
-
-
-                    articleCasseController.open();
-
-                    articleCasseController.updateArticleCasse(articleCasse);
-
-                    articleCasseController.close();
-
-                } catch (Exception ex) {System.out.println("errrreeeuuurrrr" + ex);}
-
-
-
-            }
-        }
-    }
 }
 

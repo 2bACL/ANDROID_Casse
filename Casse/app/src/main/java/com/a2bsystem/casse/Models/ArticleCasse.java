@@ -32,6 +32,7 @@ public class ArticleCasse implements Serializable {
     }
 
     public ArticleCasse(String foretagkod, String lagstalle, String q_2b_merch_code, String ftgnr, String q_2b_casse_dt_reprise, String q_2b_casse_ligne, String artnr, String qte, String comm, String panet, String pa_brut, String pvc, String trans, String date, String momskod) {
+        this.id = -1;
         this.foretagkod = foretagkod;
         this.lagstalle = lagstalle;
         this.q_2b_merch_code = q_2b_merch_code;
@@ -48,6 +49,7 @@ public class ArticleCasse implements Serializable {
         this.pa_brut = pa_brut;
         this.momskod = momskod;
     }
+
 
     public long getId() {
         return id;
@@ -177,5 +179,27 @@ public class ArticleCasse implements Serializable {
 
     public void setMomskod(String momskod) {
         this.momskod = momskod;
+    }
+
+    @Override
+    public String toString() {
+        return "ArticleCasse{" +
+                "id=" + id +
+                ", foretagkod='" + foretagkod + '\'' +
+                ", lagstalle='" + lagstalle + '\'' +
+                ", q_2b_merch_code='" + q_2b_merch_code + '\'' +
+                ", ftgnr='" + ftgnr + '\'' +
+                ", q_2b_casse_dt_reprise='" + q_2b_casse_dt_reprise + '\'' +
+                ", q_2b_casse_ligne='" + q_2b_casse_ligne + '\'' +
+                ", artnr='" + artnr + '\'' +
+                ", qte='" + qte + '\'' +
+                ", comm='" + comm + '\'' +
+                ", panet='" + panet + '\'' +
+                ", pvc='" + pvc + '\'' +
+                ", trans='" + trans + '\'' +
+                ", date='" + date + '\'' +
+                ", pa_brut='" + pa_brut + '\'' +
+                ", momskod='" + momskod + '\'' +
+                '}';
     }
 }

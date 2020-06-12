@@ -97,32 +97,49 @@ public class SaisieArticle extends AppCompatActivity {
 
                     String casseLigne = Integer.toString((articleCasseController.getNbArticlesCasseByCasse(casse) + 1) * 10);
 
-                    articleCasse.setForetagkod(casse.getForetagkod());
-                    articleCasse.setLagstalle(casse.getLagstalle());
-                    articleCasse.setQ_2b_merch_code(casse.getQ_2b_merch_code());
-                    articleCasse.setQ_2b_casse_dt_reprise(casse.getQ_2b_casse_dt_reprise());
-                    articleCasse.setFtgnr(casse.getFtgnr());
-                    articleCasse.setQ_2b_casse_ligne(casseLigne);
-                    articleCasse.setTrans("CREATED");
-                    articleCasse.setMomskod(getMomsKod(obj.getString("artnr")));
-                    articleCasse.setDate((obj.getString("date")));
-                    articleCasse.setArtnr((obj.getString("artnr")));
-                    articleCasse.setQte("");
-                    articleCasse.setComm("");
-                    articleCasse.setPa_brut("");
-                    articleCasse.setPanet("");
-                    articleCasse.setPvc((obj.getString("pvc")));
+                    // Recherche du client dans le QR code
+                    String client = "";
+                    try {
+                        client = obj.getString("ftgnr").trim();
+                    }
+                    catch (Exception e){}
 
-                    //getPrice();
+                    if(client.equalsIgnoreCase("") || client.equalsIgnoreCase(casse.getFtgnr().trim())){
+                        articleCasse.setForetagkod(casse.getForetagkod());
+                        articleCasse.setLagstalle(casse.getLagstalle());
+                        articleCasse.setQ_2b_merch_code(casse.getQ_2b_merch_code());
+                        articleCasse.setQ_2b_casse_dt_reprise(casse.getQ_2b_casse_dt_reprise());
+                        articleCasse.setFtgnr(casse.getFtgnr());
+                        articleCasse.setQ_2b_casse_ligne(casseLigne);
+                        articleCasse.setTrans("CREATED");
+                        articleCasse.setMomskod(getMomsKod(obj.getString("artnr")));
+                        articleCasse.setDate((obj.getString("date")));
+                        articleCasse.setArtnr((obj.getString("artnr")));
+                        articleCasse.setQte("");
+                        articleCasse.setComm("");
+                        articleCasse.setPa_brut("");
+                        articleCasse.setPanet("");
+                        articleCasse.setPvc((obj.getString("pvc")));
 
-                    articleCasseController.createArticleCasse(articleCasse);
 
+                        Intent ModifArticleActivity = new Intent(SaisieArticle.this, ModifArticle.class);
+                        ModifArticleActivity.putExtra("articleCasse",articleCasse);
+                        ModifArticleActivity.putExtra("casse",casse);
+                        SaisieArticle.this.finish();
+                        startActivity(ModifArticleActivity);
+                    }
+                    else {
+                        showError("Ce produit n'appartient pas à " + casse.getFtgnamn() + "(" + casse.getFtgnr() + ")", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent Saisie = new Intent(SaisieArticle.this, SaisieArticle.class);
+                                Saisie.putExtra("casse",casse);
+                                SaisieArticle.this.finish();
+                                startActivity(Saisie);
+                            }
+                        });
+                    }
 
-                    Intent ModifArticleActivity = new Intent(SaisieArticle.this, ModifArticle.class);
-                    ModifArticleActivity.putExtra("articleCasse",articleCasse);
-                    ModifArticleActivity.putExtra("casse",casse);
-                    SaisieArticle.this.finish();
-                    startActivity(ModifArticleActivity);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

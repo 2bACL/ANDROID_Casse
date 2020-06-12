@@ -22,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_CLIENT         = "clients";
     public static final String TABLE_CONFIG         = "config";
     public static final String TABLE_RPR            = "rpr";
+    public static final String TABLE_PRIX           = "prix";
 
     // Common column names
     public static final String KEY_ID = "id";
@@ -108,6 +109,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_MOMSKOD               + " TEXT NOT NULL"
             + ")";
 
+    // Prix table create statement
+    public static final String CREATE_TABLE_PRIX = "CREATE TABLE "
+            + TABLE_PRIX
+            + "("
+            + KEY_ID                    + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + KEY_FORETAGKOD            + " TEXT NOT NULL,"
+            + KEY_LAGSTALLE             + " TEXT NOT NULL,"
+            + KEY_FTGNR                 + " TEXT NOT NULL,"
+            + KEY_ARTNR                 + " TEXT NOT NULL,"
+            + KEY_DATE                  + " TEXT NOT NULL,"
+            + KEY_PANET                 + " TEXT NOT NULL,"
+            + KEY_PA_BRUT               + " TEXT NOT NULL,"
+            + KEY_PVC                   + " TEXT NOT NULL"
+            + ")";
+
     // Config table create statement
     public static final String CREATE_TABLE_CONFIG = "CREATE TABLE "
             + TABLE_CONFIG
@@ -161,6 +177,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_CONFIG);
         db.execSQL(CREATE_TABLE_CASSE);
         db.execSQL(CREATE_TABLE_RPR);
+        db.execSQL(CREATE_TABLE_PRIX);
     }
 
     @Override
@@ -172,6 +189,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONFIG);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CASSE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RPR);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRIX);
 
         // create new tables
         onCreate(db);

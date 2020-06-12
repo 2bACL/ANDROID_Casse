@@ -12,25 +12,23 @@
     <Button
         android:id="@+id/saisie_manu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@color/colorAccent"
         android:textColor="@color/white"
         android:text="SAISIE MANUELLE"
         android:textSize="14dp"
         android:layout_margin="30dp"
-        android:layout_weight="1"
         android:layout_alignParentBottom="true"/>
 
     <Button
         android:id="@+id/saisie_qr"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@color/colorAccent"
         android:textColor="@color/white"
         android:text="SCAN QRCODE"
         android:textSize="14dp"
         android:layout_margin="30dp"
-        android:layout_weight="1"
         android:layout_alignParentBottom="true"/>
 
 
