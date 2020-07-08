@@ -100,7 +100,7 @@ public class SaisieArticle extends AppCompatActivity {
                     // Recherche du client dans le QR code
                     String client = "";
                     try {
-                        client = obj.getString("ftgnr").trim();
+                        client = obj.getString("ftgnr").trim().toLowerCase();
                     }
                     catch (Exception e){}
 
@@ -112,9 +112,9 @@ public class SaisieArticle extends AppCompatActivity {
                         articleCasse.setFtgnr(casse.getFtgnr());
                         articleCasse.setQ_2b_casse_ligne(casseLigne);
                         articleCasse.setTrans("CREATED");
-                        articleCasse.setMomskod(getMomsKod(obj.getString("artnr")));
+                        articleCasse.setMomskod(getMomsKod(obj.getString("artnr").toLowerCase()));
                         articleCasse.setDate((obj.getString("date")));
-                        articleCasse.setArtnr((obj.getString("artnr")));
+                        articleCasse.setArtnr((obj.getString("artnr").toLowerCase()));
                         articleCasse.setQte("");
                         articleCasse.setComm("");
                         articleCasse.setPa_brut("");

@@ -263,8 +263,7 @@ public class Configuration extends AppCompatActivity {
         params.put("Lagstalle",mDepot.getText().toString());
         String URL = Helper.GenereateURI(Configuration.this, params, "getpa");
 
-
-
+        System.out.println(URL);
         // Call API JEE
         GetPa task = new GetPa();
         task.execute(new String[] { URL });
@@ -337,9 +336,9 @@ public class Configuration extends AppCompatActivity {
                     articleController.deleteAll();
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject currentRow = jsonArray.getJSONObject(i);
-                        articleController.createArticle(currentRow.getString("artnr"),
-                                currentRow.getString("momskod"),
-                                currentRow.getString("q_gcar_lib1"));
+                        articleController.createArticle(currentRow.getString("artnr").toLowerCase(),
+                                currentRow.getString("momskod").toLowerCase(),
+                                currentRow.getString("q_gcar_lib1").toLowerCase());
                     }
                     articleController.close();
 
@@ -432,8 +431,8 @@ public class Configuration extends AppCompatActivity {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject currentRow = jsonArray.getJSONObject(i);
                         clientController.createClient(Foretagkod,
-                                currentRow.getString("FtgNr"),
-                                currentRow.getString("FtgNamn"));
+                                currentRow.getString("FtgNr").toLowerCase(),
+                                currentRow.getString("FtgNamn").toLowerCase());
                     }
                     showOk("Mise à jour des clients réussie", new DialogInterface.OnClickListener() {
                         @Override
@@ -506,6 +505,7 @@ public class Configuration extends AppCompatActivity {
             unLockUI(true);
             successArticles.cancel();
             pbbar.setVisibility(View.GONE);
+            System.out.println("aaaa " + output);
             if(output.equalsIgnoreCase("-1"))
             {
                 showError("Erreur lors du chargement des prix...", new DialogInterface.OnClickListener() {
@@ -517,6 +517,7 @@ public class Configuration extends AppCompatActivity {
             else {
 
                 try {
+                    System.out.println("OKKK");
 
                     JSONArray jsonArray = new JSONArray(output);
 
@@ -527,8 +528,8 @@ public class Configuration extends AppCompatActivity {
 
                         Prix prix = new Prix(currentRow.getString("FORETAGKOD"),
                                 currentRow.getString("LAGSTALLE"),
-                                currentRow.getString("FTGNR"),
-                                currentRow.getString("ARTNR"),
+                                currentRow.getString("FTGNR").toLowerCase(),
+                                currentRow.getString("ARTNR").toLowerCase(),
                                 currentRow.getString("PANET"),
                                 currentRow.getString("PABRUT"),
                                 currentRow.getString("PVC"),
@@ -552,6 +553,8 @@ public class Configuration extends AppCompatActivity {
                     });
                     e.printStackTrace();
                 }
+
+                System.out.println("OKKK2");
             }
         }
     }

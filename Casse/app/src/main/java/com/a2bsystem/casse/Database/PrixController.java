@@ -81,14 +81,20 @@ public class PrixController {
                 + DatabaseHelper.KEY_FTGNR + " = ? AND "
                 + DatabaseHelper.KEY_ARTNR + " = ?";
 
+        System.out.println(whereClause);
+
         String[] whereArgs =
                 {
                         articleCasse.getForetagkod().trim(),
                         articleCasse.getLagstalle().trim(),
                         articleCasse.getDate().trim(),
-                        articleCasse.getFtgnr().trim(),
-                        articleCasse.getArtnr().trim()
+                        articleCasse.getFtgnr().trim().toLowerCase(),
+                        articleCasse.getArtnr().trim().toLowerCase()
                 };
+
+        for(int i = 0; i < whereArgs.length; i++){
+            System.out.println(whereArgs[i]);
+        }
 
 
         Cursor cursor = database.query(DatabaseHelper.TABLE_PRIX,

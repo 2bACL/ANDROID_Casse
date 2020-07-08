@@ -23,7 +23,6 @@ import com.a2bsystem.casse.Activities.config.Configuration;
 import com.a2bsystem.casse.Activities.listecasses.ListeCasses;
 import com.a2bsystem.casse.Helper;
 import com.a2bsystem.casse.R;
-import com.amitshekhar.DebugDB;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONObject;
@@ -50,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        DebugDB.getAddressLog();
 
         initFields();
         initListeners();
